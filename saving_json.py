@@ -1,6 +1,6 @@
 import time
 import requests
-from worm_up import results, name_of_file
+from city_crawler import results, name_of_file
 import json
 import os
 

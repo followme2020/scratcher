@@ -20,7 +20,7 @@ def get_items_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
     for matchNum, match in enumerate(matches, start=1):
         if (verbose):
             print("Match {matchNum} was found at {start}-{end}: {match}".format(matchNum=matchNum, start=match.start(),
-                                                                            end=match.end(), match=match.group()))
+                                                                                end=match.end(), match=match.group()))
         results.append(match.group()[9:-1])
 
     return results
@@ -34,3 +34,6 @@ def get_all_item_ids(city_id:int=7900, limit:int=100):
 
     print(f"found {id_list} ids")
     return id_list
+
+
+print(get_all_item_ids(7900 ,10))

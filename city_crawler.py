@@ -4,7 +4,8 @@ import bs4
 import requests
 import tqdm
 
-proxies = {"http":"http://192.117.146.110"}
+# proxies = {"http":"http://192.117.146.110"}
+proxies = {}
 
 def get_items_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
     """
@@ -56,14 +57,14 @@ def get_item_by_list_ids (item_list:list, sleep_interval_sec:int=1):
     return results
 
 # city_ids = get_items_for_city(67,7900,True)
-city_ids = get_all_item_ids(7900,10)
-print(city_ids)
-results = (get_item_by_list_ids(city_ids))
-print(results)
+# city_ids = get_all_item_ids(7900,10)
+# print(city_ids)
+# results = (get_item_by_list_ids(city_ids))
+# print(results)
 
-import pickle
+# import pickle
 # with open("data.obj", 'rb') as f:
     # a = pickle.load(f)
     # print(a)
-with open("data2.obj", 'wb') as f:
-    pickle.dump(results,f)
+# with open("data2.obj", 'wb') as f:
+#     pickle.dump(results,f)

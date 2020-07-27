@@ -4,17 +4,14 @@ import bs4
 import requests
 import tqdm
 
-# proxies = {"http":"http://192.117.146.110"}
-proxies = {}
-
-def get_items_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
+def get_ids_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
     """
     :param page: the page number to extract the items from
     :param city_id: the city id - for example Petakh Tikva is 7900
     :param verbose: choose whether to print the found ids and the match number
     :return: list of all the item ids on the specific page - for example - ['wokcob', 'keqxe0', '06mp98', '9njbjv', ... ]
     """
-    res = requests.get(f'https://www.yad2.co.il/realestate/forsale?city={city_id}&page={page}', proxies=proxies)
+    res = requests.get(f'https://www.yad2.co.il/realestate/forsale?city={city_id}&page={page}')
     soup = bs4.BeautifulSoup(res.text, 'lxml')
     blocks = soup.select('.feeditem.table')
     pattern = r'item-id=\"......\"'
@@ -28,21 +25,24 @@ def get_items_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
 
     return results
 
-def get_all_item_ids(city_id:int=7900, limit:int=100):
+def get_all_ids_city(city_id:int=7900, limit:int=100, page_sleep_interval:int=1, verbose:bool=True):
     id_list = []
-    for page in range(1,limit+1):
-        ids_in_page = get_items_for_city(page, city_id)
+    for page in tqdm.tqdm(range(1,limit+1)):
+        ids_in_page = get_ids_for_city(page, city_id, True)
         id_list.extend(ids_in_page)
-        time.sleep(1)
+        time.sleep(page_sleep_interval)
+        if (verbose):
+            print(f"page {page}: found: {len(ids_in_page)} ids. result: {ids_in_page}")
 
-    print(f"found {id_list} ids")
+    if (verbose):
+        print(f"found {len(id_list)} ids in total")
+
     return id_list
 
 def get_item_by_id(item_id:str):
     api_link = f'https://www.yad2.co.il/api/item/{item_id}'
-    response = requests.get(api_link, proxies=proxies)
+    response = requests.get(api_link)
     result = response.json()
-    print(result)
     return result
 
 # TODO: Optimize method for multiple async calls
@@ -55,16 +55,3 @@ def get_item_by_list_ids (item_list:list, sleep_interval_sec:int=1):
         except Exception as e:
             print(f"Unable to get item: {i}")
     return results
-
-# city_ids = get_items_for_city(67,7900,True)
-# city_ids = get_all_item_ids(7900,10)
-# print(city_ids)
-# results = (get_item_by_list_ids(city_ids))
-# print(results)
-
-# import pickle
-# with open("data.obj", 'rb') as f:
-    # a = pickle.load(f)
-    # print(a)
-# with open("data2.obj", 'wb') as f:
-#     pickle.dump(results,f)

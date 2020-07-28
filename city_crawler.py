@@ -23,7 +23,7 @@ def get_ids_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
                                                                                 end=match.end(), match=match.group()))
         results.append(match.group()[9:-1])
 
-    return results
+    return set(results)
 
 def get_all_ids_city(city_id:int=7900, limit:int=100, page_sleep_interval:int=1, verbose:bool=True):
     id_list = []
@@ -37,7 +37,7 @@ def get_all_ids_city(city_id:int=7900, limit:int=100, page_sleep_interval:int=1,
     if (verbose):
         print(f"found {len(id_list)} ids in total")
 
-    return id_list
+    return set(id_list)
 
 def get_item_by_id(item_id:str):
     api_link = f'https://www.yad2.co.il/api/item/{item_id}'

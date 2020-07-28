@@ -1,10 +1,10 @@
 import re
-
+import time
 import bs4
 import requests
-import time
+import tqdm
 
-def get_items_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
+def get_ids_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
     """
     :param page: the page number to extract the items from
     :param city_id: the city id - for example Petakh Tikva is 7900
@@ -23,17 +23,35 @@ def get_items_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
                                                                                 end=match.end(), match=match.group()))
         results.append(match.group()[9:-1])
 
-    return results
+    return set(results)
 
-def get_all_item_ids(city_id:int=7900, limit:int=100):
+def get_all_ids_city(city_id:int=7900, limit:int=100, page_sleep_interval:int=1, verbose:bool=True):
     id_list = []
-    for page in range(1,limit+1):
-        ids_in_page = get_items_for_city(page, city_id)
+    for page in tqdm.tqdm(range(1,limit+1)):
+        ids_in_page = get_ids_for_city(page, city_id, True)
         id_list.extend(ids_in_page)
-        time.sleep(1)
+        time.sleep(page_sleep_interval)
+        if (verbose):
+            print(f"page {page}: found: {len(ids_in_page)} ids. result: {ids_in_page}")
 
-    print(f"found {id_list} ids")
-    return id_list
+    if (verbose):
+        print(f"found {len(id_list)} ids in total")
 
+    return set(id_list)
 
-print(get_all_item_ids(7900 ,10))
+def get_item_by_id(item_id:str):
+    api_link = f'https://www.yad2.co.il/api/item/{item_id}'
+    response = requests.get(api_link)
+    result = response.json()
+    return result
+
+# TODO: Optimize method for multiple async calls
+def get_item_by_list_ids (item_list:list, sleep_interval_sec:int=1):
+    results = {}
+    for i in tqdm.tqdm(item_list):
+        try:
+            results[i] = get_item_by_id(i)
+            time.sleep(sleep_interval_sec)
+        except Exception as e:
+            print(f"Unable to get item: {i}")
+    return results

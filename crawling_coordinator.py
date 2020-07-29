@@ -4,6 +4,12 @@ from utils import chunks
 
 
 def retrieve_results_for_city(cacher: DataCacher, city_id: int, batch_size:int=20):
+    """
+    :param cacher: python object that will store data from the file
+    :param city_id: the city id - for example Petakh Tikva is 7900
+    :param batch_size: number of ids in one batch
+    :return:
+    """
     city_ids = cacher.get_ids()[city_id]
     city_id_filtered = [id for id in city_ids if not cacher.is_item_in_results(id)]
     chunked_ids = chunks(city_id_filtered, batch_size)

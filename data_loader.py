@@ -5,6 +5,10 @@ PICKLE_NAME = "data_cache.obj"
 
 class DataCacher:
     def __init__(self, filename: str = PICKLE_NAME):
+        """
+        :param filename: the file name witch the data from is needed
+        (this class allows navigate through the data collected in the file)
+        """
         self.ids = {}
         self.item_results = {}
         self.filename = filename

@@ -26,6 +26,13 @@ def get_ids_for_city(page:int=1, city_id:int=7900, verbose:bool=False):
     return set(results)
 
 def get_all_ids_city(city_id:int=7900, limit:int=100, page_sleep_interval:int=1, verbose:bool=True):
+    """
+    :param city_id: the city id - for example Petah Tikva is 7900
+    :param limit: choose how many pages to scan
+    :param page_sleep_interval: number of seconds to rest between requests
+    :param verbose: by default will print number of ids per page and then total, you can turn off passing false
+    :return: list of all the ids in the desired pages
+    """
     id_list = []
     for page in tqdm.tqdm(range(1,limit+1)):
         ids_in_page = get_ids_for_city(page, city_id, True)
@@ -40,6 +47,10 @@ def get_all_ids_city(city_id:int=7900, limit:int=100, page_sleep_interval:int=1,
     return set(id_list)
 
 def get_item_by_id(item_id:str):
+    """
+    :param item_id: for example - ['wokcob', 'keqxe0', '06mp98', '9njbjv', ... ]
+    :return: python object with the json response in it.
+    """
     api_link = f'https://www.yad2.co.il/api/item/{item_id}'
     response = requests.get(api_link)
     result = response.json()
@@ -47,6 +58,11 @@ def get_item_by_id(item_id:str):
 
 # TODO: Optimize method for multiple async calls
 def get_item_by_list_ids (item_list:list, sleep_interval_sec:int=1):
+    """
+    :param item_list: list of all the item ids. for example - ['wokcob', 'keqxe0', '06mp98', '9njbjv', ... ]
+    :param sleep_interval_sec: number of seconds sleeping between requests
+    :return: list of json responses, inside a python object.
+    """
     results = {}
     for i in tqdm.tqdm(item_list):
         try:

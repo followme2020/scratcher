@@ -26,6 +26,13 @@ import tqdm
 import time
 
 def retrieve_ids_for_city(cacher:DataCacher, city_id:int, page_limit:int=100):
+    """
+
+    :param cacher: current object from the user input
+    :param city_id: The city id - for example Petakh Tikva is 7900
+    :param page_limit: uf needed user can limit amount of pages, default is 100
+    :return: city id + the ids found in the pages ['fgh3df','etg3ew'...]
+    """
     print(len(cacher.get_ids_city(7900)))
     saved_ids = set(cacher.get_ids_city(city_id))
     print(f"currently there are {len(saved_ids)} saved ids for city {city_id}")

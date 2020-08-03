@@ -6,8 +6,8 @@ PICKLE_NAME = "data_cache.obj"
 class DataCacher:
     def __init__(self, filename: str = PICKLE_NAME):
         """
-        :param filename: the file name witch the data from is needed
-        (this class allows navigate through the data collected in the file)
+        :param filename: the file name that will store the data, if file allready exist, this __init__
+        method cache data for not over righting)
         """
         self.ids = {}
         self.item_results = {}
@@ -19,10 +19,18 @@ class DataCacher:
                 self.item_results = datacache.item_results
 
     def save_state(self):
+        """
+        :return:save current information to a file
+        """
         with open(self.filename, 'wb') as f:
             pickle.dump(self, f)
 
     def add_ids(self, city: int, ids: set):
+        """
+        :param city:the city id - for example Petakh Tikva is 7900
+        :param ids: for example - ['wokcob', 'keqxe0', '06mp98', '9njbjv', ... ]
+        :return: updated list of ids
+        """
         if city not in self.ids.keys():
             self.ids[city] = ids
         else:

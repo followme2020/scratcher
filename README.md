@@ -1,6 +1,6 @@
 # Scratcher
 
-Scratcher is a Python-based program for scraping the yad2 web site.
+Scratcher is a Python-based program for bringing some information from a site, in scientific perposes..
 It is able to save json format strings retrieved from a search page on the site. Requests for spesified area. It is designed to allow fast scraping for adds located on the site.
 
 It can easily find the adds on the site and write them to a json file. 
